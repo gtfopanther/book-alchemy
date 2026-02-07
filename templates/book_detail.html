@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+  <section class="hero">
+    <h1>{{ book.title }}</h1>
+    <p>By <a href="{{ url_for('author_detail', author_id=book.author.id) }}">{{ book.author.name }}</a></p>
+  </section>
+
+  <section class="panel">
+    <div class="detail-grid">
+      <img
+        src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-L.jpg"
+        alt="Cover for {{ book.title }}"
+      >
+      <div>
+        <div class="book-meta">
+          <span class="pill">ISBN {{ book.isbn }}</span>
+          {% if book.publication_year %}
+          <span>Published {{ book.publication_year }}</span>
+          {% endif %}
+          {% if book.rating %}
+          <span>Rating {{ book.rating }}/10</span>
+          {% endif %}
+        </div>
+        <p>Book id: {{ book.id }}</p>
+        <div class="inline-actions">
+          <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST">
+            <button type="submit">Delete Book</button>
+          </form>
+          <a class="link-button" href="{{ url_for('home') }}">Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

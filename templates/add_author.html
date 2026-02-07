@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+  <section class="hero">
+    <h1>Add a new author</h1>
+    <p>Capture the voices behind the stories before adding their books.</p>
+  </section>
+
+  <section class="panel">
+    {% if success_message %}
+    <div class="message">{{ success_message }}</div>
+    {% endif %}
+
+    <form action="{{ url_for('add_author') }}" method="POST" class="form-grid">
+      <label for="name">Author Name</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="birthdate">Birthdate</label>
+      <input type="date" id="birthdate" name="birthdate" required>
+
+      <label for="date_of_death">Date of Death</label>
+      <input type="date" id="date_of_death" name="date_of_death">
+
+      <button type="submit">Add Author</button>
+    </form>
+  </section>
+{% endblock %}

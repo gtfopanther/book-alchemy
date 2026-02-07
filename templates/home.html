@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+  <section class="hero">
+    <h1>Your library, distilled.</h1>
+    <p>Search, sort, rate, and curate your bookshelf with a crafted view of every story.</p>
+  </section>
+
+  <section class="panel">
+    <form action="{{ url_for('home') }}" method="GET" class="controls">
+      <label for="sort">Sort</label>
+      <select id="sort" name="sort">
+        <option value="title" {% if sort == "title" %}selected{% endif %}>Title</option>
+        <option value="author" {% if sort == "author" %}selected{% endif %}>Author</option>
+      </select>
+      <label for="q">Search</label>
+      <input type="text" id="q" name="q" value="{{ q }}" placeholder="Title or author">
+      <button type="submit">Apply</button>
+    </form>
+
+    {% if message %}
+    <div class="message">{{ message }}</div>
+    {% endif %}
+
+    {% if no_results_message %}
+    <div class="message">{{ no_results_message }}</div>
+    {% endif %}
+
+    <div class="grid">
+      {% for book in books %}
+      <div class="book-card">
+        <img
+          src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
+          alt="Cover for {{ book.title }}"
+        >
+        <h3 class="book-title">
+          <a href="{{ url_for('book_detail', book_id=book.id) }}">{{ book.title }}</a>
+        </h3>
+        <div class="book-meta">
+          <span class="pill">
+            <a href="{{ url_for('author_detail', author_id=book.author.id) }}">{{ book.author.name }}</a>
+          </span>
+          {% if book.publication_year %}
+          <span>{{ book.publication_year }}</span>
+          {% endif %}
+          {% if book.rating %}
+          <span>Rating {{ book.rating }}/10</span>
+          {% endif %}
+        </div>
+        <div class="inline-actions">
+          <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST">
+            <button type="submit">Delete Book</button>
+          </form>
+          <form action="{{ url_for('delete_author', author_id=book.author.id) }}" method="POST">
+            <button type="submit" class="link-button">Delete Author</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

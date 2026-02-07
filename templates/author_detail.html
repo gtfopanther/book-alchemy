@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+  <section class="hero">
+    <h1>{{ author.name }}</h1>
+    <p>Author profile and bibliography.</p>
+  </section>
+
+  <section class="panel">
+    <div class="book-meta">
+      {% if author.birth_date %}
+      <span>Born {{ author.birth_date }}</span>
+      {% endif %}
+      {% if author.date_of_death %}
+      <span>Died {{ author.date_of_death }}</span>
+      {% endif %}
+    </div>
+
+    <div class="inline-actions" style="margin-top: 12px;">
+      <form action="{{ url_for('delete_author', author_id=author.id) }}" method="POST">
+        <button type="submit">Delete Author</button>
+      </form>
+      <a class="link-button" href="{{ url_for('home') }}">Back to Home</a>
+    </div>
+  </section>
+
+  <section class="panel" style="margin-top: 20px;">
+    <h2>Books by {{ author.name }}</h2>
+    <div class="grid">
+      {% for book in author.books %}
+      <div class="book-card">
+        <img
+          src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
+          alt="Cover for {{ book.title }}"
+        >
+        <h3 class="book-title">
+          <a href="{{ url_for('book_detail', book_id=book.id) }}">{{ book.title }}</a>
+        </h3>
+        <div class="book-meta">
+          {% if book.publication_year %}
+          <span>{{ book.publication_year }}</span>
+          {% endif %}
+          {% if book.rating %}
+          <span>Rating {{ book.rating }}/10</span>
+          {% endif %}
+        </div>
+      </div>
+      {% else %}
+      <p>No books in the library yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}
